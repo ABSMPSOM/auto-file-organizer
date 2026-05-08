@@ -1,227 +1,112 @@
-# Auto File Organizer
+# 🗂️ FileOrganizer
 
-Smart Python file organizer that automatically sorts files into category folders, removes duplicate files using MD5 hash comparison, and keeps directories clean with zero manual work.
+> Drop it in any folder. Run it once. Watch the chaos become order — with duplicate detection built in.
 
----
-
-## Features
-
-* Automatic file categorization
-* Duplicate file detection and removal
-* Auto folder creation
-* Smart file renaming if same filename exists
-* Supports multiple file types
-* Organizes files inside current script directory
-* Lightweight and fast
-* Recursive-safe organization logic
+![Python](https://img.shields.io/badge/Python-3.6+-3776AB?style=flat&logo=python&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero-brightgreen?style=flat)
 
 ---
 
-## Supported Categories
+## ✨ What it does
 
-### Media
+FileOrganizer is a single Python script that **automatically sorts any messy folder** into clean subfolders by file type — and silently kills duplicates along the way.
 
-* Images
-* Videos
-* Music
-
-### Documents & Data
-
-* Documents
-* Presentations
-* Spreadsheets
-
-### Compressed & Executable
-
-* Archives
-* Programs
-
-### Development & Design
-
-* Code files
-* Design & 3D assets
-* Fonts
-
-### System
-
-* Shortcuts
-
-Unknown file types are automatically moved into:
-
-```text
-Others/
-```
+No config. No install. Just run it.
 
 ---
 
-## Supported File Extensions
-
-### Images
-
-```text
-.jpg .jpeg .png .gif .webp .bmp .tiff .svg .ico .heic .raw
-```
-
-### Videos
-
-```text
-.mp4 .mkv .avi .mov .wmv .flv .webm .m4v
-```
-
-### Music
-
-```text
-.mp3 .wav .aac .flac .ogg .m4a .wma .midi
-```
-
-### Documents
-
-```text
-.pdf .docx .doc .txt .rtf .odt .md
-```
-
-### Presentations
-
-```text
-.pptx .ppt .key .odp
-```
-
-### Spreadsheets
-
-```text
-.xlsx .xls .csv .ods
-```
-
-### Archives
-
-```text
-.zip .rar .7z .tar .gz .bz2 .iso .tgz
-```
-
-### Programs
-
-```text
-.exe .msi .apk .bat .cmd .sh .dmg .pkg .app
-```
-
-### Code
-
-```text
-.py .js .html .css .java .cpp .c .cs .json .xml .php .rb .sql .yaml
-```
-
-### Design & 3D
-
-```text
-.psd .ai .xd .fig .blend .obj .stl .step
-```
-
-### Fonts
-
-```text
-.ttf .otf .woff .woff2
-```
-
-### Shortcuts
-
-```text
-.lnk .url .desktop
-```
-
----
-
-## How It Works
-
-The script:
-
-1. Detects the current script directory
-2. Scans all files inside the folder
-3. Identifies file type by extension
-4. Creates category folders automatically
-5. Moves files into matching folders
-6. Detects duplicate files using MD5 hashing
-7. Deletes duplicates automatically
-8. Renames files if same filename already exists
-
----
-
-## Example
-
-Before:
-
-```text
-Folder/
- ├── movie.mp4
- ├── image.png
- ├── notes.pdf
- ├── script.py
- ├── song.mp3
-```
-
-After:
-
-```text
-Folder/
- ├── Videos/
- ├── Images/
- ├── Documents/
- ├── Code/
- ├── Music/
-```
-
----
-
-## Installation
-
-Install Python:
-
-https://www.python.org/downloads/
-
-Clone repository:
+## ⚡ Quick Start
 
 ```bash
-git clone https://github.com/ABSMPSOM/auto-file-organizer.git
+# 1. Clone the repo
+git clone https://github.com/you/file-organizer.git
+
+# 2. Drop organize.py into any messy folder
+
+# 3. Run it
+python organize.py
 ```
 
-Go to project folder:
+---
+
+## 🖥️ Live Output
+
+```
+Moved: resume.pdf        → Documents/
+Moved: vacation.jpg      → Images/
+Duplicate deleted: vacation_copy.jpg
+Moved: app.py            → Code/
+Moved: setup.exe         → Programs/
+Moved: beats.mp3         → Music/
+
+Done organizing.
+```
+
+---
+
+## 📁 Categories
+
+| Folder | Extensions |
+|--------|------------|
+| 🖼️ Images | `.jpg` `.jpeg` `.png` `.gif` `.webp` |
+| 🎬 Videos | `.mp4` `.mkv` `.avi` |
+| 🎵 Music | `.mp3` `.wav` |
+| 📄 Documents | `.pdf` `.docx` `.txt` `.pptx` `.xlsx` |
+| 🗜️ Archives | `.zip` `.rar` `.7z` |
+| ⚙️ Programs | `.exe` `.msi` |
+| 💻 Code | `.py` `.js` `.html` `.css` |
+| 📦 Others | Everything else |
+
+---
+
+## 🔥 Features
+
+- ✅ **MD5 duplicate detection** — hashes every file; identical files are deleted, not just renamed
+- ✅ **Safe conflict resolution** — if a filename already exists, appends `_1`, `_2`… instead of overwriting
+- ✅ **Zero dependencies** — pure Python standard library, no `pip install` needed
+- ✅ **Self-aware** — skips its own script file so it never moves itself
+
+---
+
+## 🚀 How It Works
+
+```
+📁 Scan folder → 🔍 MD5 duplicate check → 🏷️ Match extension → ✅ Move to category folder
+```
+
+1. Walks the target folder (top-level only)
+2. Hashes each file with MD5 — deletes exact duplicates immediately
+3. Matches the file extension to a category
+4. Creates the category subfolder if it doesn't exist
+5. Moves the file — safely renames if a conflict exists
+
+---
+
+## 🤝 Contributing
+
+Contributions are what make open source great. Here's how you can help:
+
+| Type | How |
+|------|-----|
+| ➕ Add file types | Edit `FILE_CATEGORIES` in the script and open a PR |
+| 🐛 Report a bug | Open a GitHub Issue with your OS + the file that caused it |
+| 💡 Feature ideas | Suggest dry-run mode, config files, logging in Discussions |
+| ⭐ Star the repo | Helps others find the project |
 
 ```bash
-cd auto-file-organizer
+# Fork → Clone → Edit → PR
+git checkout -b feature/my-improvement
+git commit -m "feat: add dry-run mode"
+git push origin feature/my-improvement
 ```
 
 ---
 
-## Usage
+## 📄 License
 
-Run:
-
-```bash
-python organizer.py
-```
-
-The script will automatically organize the folder where it exists.
+MIT — free to use, modify, and distribute.
 
 ---
 
-## Future Improvements
-
-* GUI version
-* Drag and drop support
-* Auto monitoring mode
-* Recycle bin recovery
-* AI-based file recognition
-* Scheduled automatic organization
-
----
-
-## License
-
-MIT License
-
----
-
-## Author
-
-Soumen Sadhukhan
-
-Built with Python because manually organizing files is a task humanity should have automated years ago.
+<p align="center">Made with Python · Drop it in, run it, done.</p>
