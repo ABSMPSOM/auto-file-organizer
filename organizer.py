@@ -1,13 +1,17 @@
+
+from asyncio import log
 import os
 import shutil
 import hashlib
 from pathlib import Path
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
+from tkinter import scrolledtext
 
 # ===== CURRENT SCRIPT DIRECTORY =====
 
 TARGET_FOLDER = os.path.dirname(os.path.abspath(__file__))
-
-    # ===== FILE TYPES =====
 
 # ===== EXPANDED FILE TYPES =====
 
@@ -32,10 +36,9 @@ FILE_CATEGORIES = {
     "Fonts": [".ttf", ".otf", ".woff", ".woff2"],
     
     # System
-    "Shortcuts": [".lnk", ".url", ".desktop"]
+    "Shortcut": [".lnk", ".url", ".desktop",".lnk"],
 }
-
-    # ===== HASH FUNCTION =====
+# ===== HASH FUNCTION =====
 
 def get_file_hash(file_path):
     hash_md5 = hashlib.md5()
@@ -58,7 +61,7 @@ def get_category(extension):
 
 # ===== ORGANIZER =====
 
-def organize_files(folder):
+def organize_files(folder, log):
     seen_hashes = {}
     # ✅ Use os.listdir instead of os.walk to avoid re-scanning created subfolders
     for file in os.listdir(folder):
@@ -93,12 +96,99 @@ def organize_files(folder):
             counter += 1
         try:
             shutil.move(file_path, new_destination)
+            log(f"Moved: {file} -> {category}")
             print(f"Moved: {file} -> {category}")
         except Exception as e:
+            log(f"Error moving {file}: {e}")
             print(e)
 
+# ===== UI =====
+def main():
+    # ===== BROWSE FUNCTION =====
+    def browse_folder():
+        folder_selected = filedialog.askdirectory()
+        if folder_selected:
+            path_var.set(folder_selected)
+            folder_label.config(
+                text=f"📂 Target Folder:\n{folder_selected}"
+            )
+    def log(msg):
+
+        log_box.config(state='normal')
+
+        log_box.insert(tk.END, msg + "\n")
+
+        log_box.see(tk.END)
+
+        log_box.config(state='disabled')
+    # ===== MAIN WINDOW =====
+    root = tk.Tk()
+    root.title("File Organizer")
+    root.geometry("1000x450")
+    
+    # ===== TITLE =====
+    title = tk.Label(
+        root,
+        text="📁 Auto File Organizer",
+        font=("Arial", 18, "bold")
+    )
+    title.pack(pady=15)
+    # ===== PATH VARIABLE =====
+    path_var = tk.StringVar()
+    # ===== BROWSE BUTTON =====
+    browse_btn = tk.Button(
+        root,
+        text="Browse Folder",
+        font=("Arial", 11),
+        width=18,
+        height=2,
+        command=browse_folder
+    )
+    start_btn = tk.Button(
+        root,
+        text="Start Organizing",
+        font=("Arial", 11),
+        width=18,
+        height=2,
+        command=lambda: [organize_files(path_var.get(), log), messagebox.showinfo("Done", "Files have been organized!")],
+
+    )
+    browse_btn.pack(pady=10)
+    start_btn.pack(pady=10)
+    # ===== FOLDER LABEL =====
+    folder_label = tk.Label(
+        root,
+        text="No folder selected",
+        wraplength=450,
+        justify="center",
+        font=("Arial", 10)
+    )
+    folder_label.pack(pady=10)
+
+    # ===== LOG SHOW =====
+    log_box = scrolledtext.ScrolledText(
+        root,
+        font=("Consolas", 10),
+        width=80,
+        height=10,
+        bg="#1e1e1e",
+        fg="white",
+        insertbackground="white"
+        )
+    log_box.pack(
+        padx=50, 
+        pady=50,
+        fill="both", 
+        expand=True
+        )
+
     # ===== START =====
+    root.mainloop()
+
+
+# ===== START =====
 
 if __name__ == "__main__":
-    organize_files(TARGET_FOLDER)
+    main()
+    organize_files(TARGET_FOLDER, log)
     print("\nDone organizing.")
